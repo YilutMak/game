@@ -1,0 +1,47 @@
+.page-title {
+  background-color: #091D42;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+#answer-box,
+#game-over-box {
+  padding-top: 80px;
+  padding-bottom: 80px;
+  background-color: #9AB4CB;
+  text-align: center;
+}
+
+#counter {
+  font-size: 30px;
+}
+
+#equation {
+  margin-top: 50px;
+  font-size: 60px;
+  font-weight: bold;
+}
+
+#solution-input {
+  margin-top: 3em;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+#game-over-box>h1 {
+  font-size: 60px;
+}
+
+#game-over-box>h2 {
+  font-size: 30px;
+}
+
+#game-over-box>button {
+  margin-top: 50px;
+}
+
+/* Your Code Below */
