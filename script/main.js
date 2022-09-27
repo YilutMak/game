@@ -4,7 +4,7 @@ const $GameMap = $("#game-map");
 const GAME_WIDTH = 500;
 const GAME_HEIGHT = 500;
 let xPosition = -875;
-let yPosition = -542.5;
+let yPosition = -875;
 
 // Game Loop Related
 const FPS = 60;
@@ -33,10 +33,12 @@ let goLeft = false;
 let goUp = false;
 let goRight = false;
 let goDown = false;
+let shoot = false
 let keyLeft = 65;
 let KeyUp = 87;
 let KeyRight = 68;
 let KeyDown = 83;
+let KeySpace = 32;
 let travelY = 0
 let travelX = 0
 
@@ -59,6 +61,9 @@ const setMapMovement = (value, keyCode) => {
   }
   if (keyCode === KeyDown) {
     goDown = value;
+  }
+  if (keyCode === KeySpace) {
+    shoot = value;
   }
 };
 
@@ -93,7 +98,6 @@ const moveMap = () => {
     travelX += VELOCITY
     }
   }
-  console.log(travelX , travelY)
 };
 
 const updateMap = () => {
@@ -324,34 +328,38 @@ game.addEnemy(p1Settings);
 game.addEnemy(p1Settings);
 game.startGame();
 
-$GameScreen.on("click", function (e) {
-  const { clientX, clientY, currentTarget } = e;
-  const { left, top } = currentTarget.getBoundingClientRect();
-  const mX = clientX - left;
-  const mY = clientY - top;
+$GameScreen.on("mousemove", function (e) {
 
-  const dX = mX - 250
-  const dY = mY - 250
-  const l = Math.sqrt(dX * dX + dY * dY)
+  if(shoot){
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top } = currentTarget.getBoundingClientRect();
+    const mX = clientX - left;
+    const mY = clientY - top;
 
-  game.addBullet({
-    yVelocity: dY / l,
-    xVelocity: dX / l,
-  });
+    const dX = mX - 250
+    const dY = mY - 250
+    const l = Math.sqrt(dX * dX + dY * dY)
+
+    game.addBullet({
+      yVelocity: dY / l,
+      xVelocity: dX / l,
+    });
+    shoot = false
+  }
 });
+
+
+
+
 
 //Level 1:
 //Generate random zombies (loop)
 //  gradually spawn more as time increase
 
-//Add player boundaries
-
 //Add hit box for zombies
 //  If zombie touches player, game is over
 
-//Add gun for player
-//  automatically shoots at closest zombie
-//  zombie disappears if hit
+//  zombie disappears if hit by gun
 
 //Add game start screen
 //  show instructions

@@ -46,10 +46,17 @@
 
 /* Your Code Below */
 
+
+#game-start {
+  width: 500px;
+  height: 500px;
+}
+
+
 #game-screen {
 width: 500px;
 height: 500px;
-position: relative;
+position: absolute;
 overflow: hidden;
 margin: 0 auto;
 }
@@ -58,6 +65,24 @@ margin: 0 auto;
 width: 2250px;
 height: 2250px;
 object-fit: float;
+}
+
+#wasd {
+  width: auto;
+  height: 150px;
+  object-fit: float;
+}
+
+#spacebar {
+  width: auto;
+  height: 55px;
+  object-fit: float;
+}
+
+#cursor {
+  width: auto;
+  height: 20px;
+  object-fit: float;
 }
 
 #player{
