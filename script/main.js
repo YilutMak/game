@@ -3,8 +3,8 @@ const $GameScreen = $("#game-screen");
 const $GameMap = $("#game-map");
 const GAME_WIDTH = 500;
 const GAME_HEIGHT = 500;
-let xPosition = 0;
-let yPosition = -250;
+let xPosition = -875;
+let yPosition = -542.5;
 
 // Game Loop Related
 const FPS = 60;
@@ -37,6 +37,8 @@ let keyLeft = 65;
 let KeyUp = 87;
 let KeyRight = 68;
 let KeyDown = 83;
+let travelY = 0
+let travelX = 0
 
 //zombies
 let CenterX = GAME_HEIGHT / 2 - ENEMY_HEIGHT / 2;
@@ -62,21 +64,36 @@ const setMapMovement = (value, keyCode) => {
 
 //Moving the map
 const moveMap = () => {
-  //console.log(yPosition)
+
   if (goLeft) {
-    yPosition += VELOCITY;
+    if(travelY < 888){
+    yPosition += VELOCITY
+    travelY += VELOCITY
+    }
+
+
   }
   if (goRight) {
+    if(travelY > -892){
     yPosition -= VELOCITY;
+    travelY -= VELOCITY
+    }
   }
 
   if (goUp) {
+    if(travelX > -891){
     xPosition += VELOCITY;
+    travelX -= VELOCITY
+    }
   }
 
   if (goDown) {
+    if(travelX < 890){
     xPosition -= VELOCITY;
+    travelX += VELOCITY
+    }
   }
+  console.log(travelX , travelY)
 };
 
 const updateMap = () => {
@@ -94,22 +111,22 @@ const generateRandom = () => {
     case 0:
       randomX = randomInt(240);
       randomY = -240;
-      console.log("case1", randomX, randomY);
+      //console.log("case1", randomX, randomY);
       break;
     case 1:
       randomX = randomInt(240);
       randomY = 240;
-      console.log("case2", randomX, randomY);
+      //console.log("case2", randomX, randomY);
       break;
     case 2:
       randomX = -240;
       randomY = randomInt(240);
-      console.log("case3", randomX, randomY);
+      //console.log("case3", randomX, randomY);
       break;
     case 3:
       randomX = 240;
       randomY = randomInt(240);
-      console.log("case4", randomX, randomY);
+      //console.log("case4", randomX, randomY);
       break;
   }
 
