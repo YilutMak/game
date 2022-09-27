@@ -51,7 +51,7 @@ width: 500px;
 height: 500px;
 position: relative;
 overflow: hidden;
-margin: 100px;
+margin: 0 auto;
 }
 
 #game-map{

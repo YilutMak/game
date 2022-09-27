@@ -1,30 +1,19 @@
-  this.moveCharacter = () => {
-    const {
-      velocity,
-      position: { x, y },
-      movement: { goLeft, goUp, goRight, goDown }
-    } = character
+    let enemyX = game.enemies[0].position.x
+    let enemyY = game.enemies[0].position.y
 
-    let newX = x
-    let newY = y
-
-    if (left) {
-      newX = x - velocity < 0 ? 0 : newX - velocity
+    if(bulletX > enemyX) {
+      bulletX -= this.velocity
     }
-    if (up) {
-      newY = y - velocity < 0 ? 0 : newY - velocity
+    if(bulletX < enemyX) {
+      bulletX += this.velocity
     }
-    if (right) {
-      newX = x + w + velocity > gameW ? gameW - w : newX + velocity
+    if(bulletY > enemyY) {
+      bulletY -= this.velocity
     }
-    if (down) {
-      newY = y + h + velocity > gameH ? gameH - h : newY + velocity
+    if(bulletY < enemyY) {
+      bulletY += this.velocity
     }
 
-    character.position.x = newX
-    character.position.y = newY
-    character.$elem.css('left', newX).css('top', newY)
-  }
 
 
 
@@ -35,17 +24,27 @@
 
 
 
+    const RADIAN = Math.PI / 180
+
+$GameScreen.on("click", function (e) {
+  const { clientX, clientY, currentTarget } = e;
+  const { left, top } = currentTarget.getBoundingClientRect();
+  const mX = clientX - left;
+  const mY = clientY - top;
+
+  const rot = Math.atan2(250 - mX, -250 + mY) / (RADIAN + 90)
+  const xVelocity = 2.5 * Math.cos(RADIAN * rot)
+  const yVelocity = 2.5 * Math.sin(RADIAN * rot)
+
+  console.log(xVelocity, yVelocity)
 
 
-      if (left) {
-      newX = x - velocity < 0 ? 0 : newX - velocity
-    }
-    if (up) {
-      newY = y - velocity < 0 ? 0 : newY - velocity
-    }
-    if (right) {
-      newX = x + w + velocity > gameW ? gameW - w : newX + velocity
-    }
-    if (down) {
-      newY = y + h + velocity > gameH ? gameH - h : newY + velocity
-    }
+
+
+  const xDirection = mX <= 250 ? -1 : 1;
+  const yDirection = mY <= 250 ? -1 : 1;
+
+  const xDiff = ((mX - 250) / 250)
+  const yDiff = ((mY - 250) / 250)
+
+  console.log(yDiff /)
