@@ -23,6 +23,11 @@ const VELOCITY = 1;
 // Enemy Related
 let enemySpeed = 0.5
 
+// Bullet Related
+const BULLET_WIDTH = 4;
+const BULLET_HEIGHT = 4;
+const BVELOCITY = 2;
+
 // Movement Related
 let goLeft = false;
 let goUp = false;
@@ -57,6 +62,7 @@ const setMapMovement = (value, keyCode) => {
 
 //Moving the map
 const moveMap = () => {
+  //console.log(yPosition)
   if (goLeft) {
     yPosition += VELOCITY;
   }
@@ -158,8 +164,7 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
     let newX = x
     let newY = y
 
-    console.log(newX , newY)
-
+    //zombie move towards player
     if(newX > 240) {
       newX -= enemySpeed
     }
@@ -173,7 +178,14 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
       newY += enemySpeed
     }
 
+    //when zombie touches player, lose
+    if(newX<=257 && newX>=223){
+      if(newY<=250 && newY>=230){
+        //console.log('loser')
+      }
+    }
 
+    //When player moves, the zombies are shifted too
     if(goLeft){
       newX += VELOCITY
     }
@@ -193,12 +205,80 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
   }
 }
 
+const b1Settings = {
+  initDimension: {
+    w: BULLET_WIDTH,
+    h: BULLET_HEIGHT,
+  },
+  initVelocity: BVELOCITY,
+  initBackground: "yellow",
+};
+
+function Bullet({ initDimension, initVelocity, initBackground }) {
+  this.$elem = null
+  this.id = `_${Math.random().toString(36).substring(2, 15)}`
+  this.dimension = initDimension
+  this.velocity = initVelocity
+  this.position = { x: CenterX - randomX, y: CenterY - randomY }
+  this.background = initBackground
+
+  // Create bullet and appends the bullet to game-screen
+  const init = () => {
+    const {
+      id,
+      position: { x, y },
+      dimension: { w, h },
+      background,
+    } = this;
+    this.$elem = $(`<div id="${id}"></div>`)
+      .css("left", x)
+      .css("top", y)
+      .css("background", background)
+      .css("width", w)
+      .css("height", h)
+      .css("position", "absolute")
+      .appendTo("#game-screen");
+  };
+
+  init();
+
+
+  this.moveBullet = () => {
+    const {
+      position: { x, y },
+    } = this
+
+    let bulletX = x
+    let bulletY = y
+
+    console.log(game.enemies[0].position)
+
+        if(bulletX > 240) {
+      bulletX -= enemySpeed
+    }
+    if(bulletX < 240) {
+      bulletX += enemySpeed
+    }
+    if(bulletY > 240) {
+      bulletY -= enemySpeed
+    }
+    if(bulletY < 240) {
+      bulletY += enemySpeed
+    }
+
+    this.position.x = bulletX
+    this.position.y = bulletY
+    this.$elem.css('left', bulletX).css('top', bulletY)
+  }
+}
+
 //running the Game
 function Game({ id, LOOP_INTERVAL }) {
   this.$elem = $(id)
   this.id = id
   this.loop = null
   this.enemies = []
+  this.bullets = []
 
   // Handling Key Down
   const handleKeyDown = (e) => {
@@ -217,11 +297,19 @@ function Game({ id, LOOP_INTERVAL }) {
     this.enemies.forEach((Enemy) => {
       Enemy.moveEnemy()
     });
+    this.bullets.forEach((Bullet) => {
+      Bullet.moveBullet()
+    });
   };
 
   //add enemy
   this.addEnemy = (setting) => {
     this.enemies.push(new Enemy(setting, this.$elem));
+  };
+
+  //add bullets
+  this.addBullet = (setting) => {
+    this.bullets.push(new Bullet(setting, this.$elem));
   };
 
   //Start game and check key press
@@ -234,6 +322,7 @@ function Game({ id, LOOP_INTERVAL }) {
 
 const game = new Game(gameSettings)
 game.addEnemy(p1Settings)
+game.addBullet(b1Settings)
 game.startGame()
 
 
@@ -252,9 +341,6 @@ game.startGame()
 
 
 //Level 1:
-//Have zombies walk towards player
-//  zombies need to adjust according to map
-
 //Generate random zombies (loop)
 //  gradually spawn more as time increase
 
