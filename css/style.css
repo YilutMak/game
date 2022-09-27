@@ -45,3 +45,26 @@
 }
 
 /* Your Code Below */
+
+#game-screen {
+width: 500px;
+height: 500px;
+position: relative;
+overflow: hidden;
+margin: 100px;
+}
+
+#game-map{
+width:  auto;
+height: 1000px;
+object-fit: float;
+}
+
+#player{
+position: absolute;
+height: 20px;
+width: 20px;
+left: 240px;
+top: 240px;
+background-color: red
+}
