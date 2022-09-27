@@ -16,9 +16,12 @@ const gameSettings = {
 let loop = null;
 
 // Character Related
-const CHARACTER_WIDTH = 20;
-const CHARACTER_HEIGHT = 20;
-const VELOCITY = 2.5;
+const ENEMY_WIDTH = 20;
+const ENEMY_HEIGHT = 20;
+const VELOCITY = 1;
+
+// Enemy Related
+let enemySpeed = 0.5
 
 // Movement Related
 let goLeft = false;
@@ -29,6 +32,12 @@ let keyLeft = 65;
 let KeyUp = 87;
 let KeyRight = 68;
 let KeyDown = 83;
+
+//zombies
+let CenterX = GAME_HEIGHT / 2 - ENEMY_HEIGHT / 2;
+let CenterY = GAME_WIDTH / 2 - ENEMY_WIDTH / 2;
+let randomX = null;
+let randomY = null;
 
 //set character direction
 const setMapMovement = (value, keyCode) => {
@@ -44,25 +53,6 @@ const setMapMovement = (value, keyCode) => {
   if (keyCode === KeyDown) {
     goDown = value;
   }
-};
-
-// Handling Key Down
-const handleKeyDown = (e) => {
-  //if(e.keyCode == 65 ){
-  //console.log('left')
-  //}else if(e.keyCode == 87 ){
-  //console.log('up')
-  //}else if(e.keyCode == 68 ){
-  //console.log('right')
-  //}else if(e.keyCode == 83){
-  //console.log('down')}
-  setMapMovement(true, e.keyCode);
-  //console.log(goUp,goDown,goLeft,goRight)
-};
-
-// Handling Key Up
-const handleKeyUp = (e) => {
-  setMapMovement(false, e.keyCode);
 };
 
 //Moving the map
@@ -87,32 +77,13 @@ const updateMap = () => {
   $GameMap.offset({ top: xPosition, left: yPosition });
 };
 
-//update the movement of everything
-const updateMovements = () => {
-  moveMap();
-  updateMap();
-
-};
-
-//Start game and check key press
-const startGame = () => {
-  $(document).on("keydown", handleKeyDown);
-  $(document).on("keyup", handleKeyUp);
-  setInterval(updateMovements, LOOP_INTERVAL);
-};
-
-let CenterX = GAME_HEIGHT / 2 - CHARACTER_HEIGHT / 2;
-let CenterY = GAME_WIDTH / 2 - CHARACTER_WIDTH / 2;
-let randomX = null;
-let randomY = null;
-
 const randomInt = (max) => {
   return Math.floor(Math.random() * max);
 };
 
 const generateRandom = () => {
-  let randomX
-  let randomY
+  let randomX;
+  let randomY;
   switch (randomInt(4)) {
     case 0:
       randomX = randomInt(240);
@@ -136,57 +107,37 @@ const generateRandom = () => {
       break;
   }
 
-  return { randomX, randomY }
+  return { randomX, randomY };
 };
-
 
 const p1Settings = {
   initDimension: {
-    w: CHARACTER_WIDTH,
-    h: CHARACTER_HEIGHT,
+    w: ENEMY_WIDTH,
+    h: ENEMY_HEIGHT,
   },
   initVelocity: VELOCITY,
   initBackground: "blue",
 };
 
-function Game({ id, LOOP_INTERVAL }) {
-  const game = {
-    $elem: $(id),
-    id,
-    loop: null,
-    characters: [],
-  };
+//Enemies
+function Enemy({ initDimension, initVelocity, initBackground }) {
+  const { randomX, randomY } = generateRandom();
+  this.$elem = null
+  this.id = `_${Math.random().toString(36).substring(2, 15)}`
+  this.dimension = initDimension
+  this.velocity = initVelocity
+  this.position = { x: CenterX - randomX, y: CenterY - randomY }
+  this.background = initBackground
 
-  this.addCharacter = (setting) => {
-    game.characters.push(new Character(setting));
-  };
-}
-
-//Character
-function Character({
-  initDimension,
-  initVelocity,
-  initBackground,
-}) {
-  const { randomX, randomY } = generateRandom()
-  const character = {
-    $elem: null,
-    id: `_${Math.random().toString(36).substring(2, 15)}`,
-    dimension: initDimension,
-    velocity: initVelocity,
-    position: { x: CenterX - randomX, y: CenterY - randomY },
-    background: initBackground,
-  };
-
-  // Create character and appends the character to game-screen
+  // Create enemy and appends the enemy to game-screen
   const init = () => {
     const {
       id,
       position: { x, y },
       dimension: { w, h },
       background,
-    } = character;
-    character.$elem = $(`<div id="${id}"></div>`)
+    } = this;
+    this.$elem = $(`<div id="${id}"></div>`)
       .css("left", x)
       .css("top", y)
       .css("background", background)
@@ -197,14 +148,107 @@ function Character({
   };
 
   init();
+
+
+  this.moveEnemy = () => {
+    const {
+      position: { x, y },
+    } = this
+
+    let newX = x
+    let newY = y
+
+    console.log(newX , newY)
+
+    if(newX > 240) {
+      newX -= enemySpeed
+    }
+    if(newX < 240) {
+      newX += enemySpeed
+    }
+    if(newY > 240) {
+      newY -= enemySpeed
+    }
+    if(newY < 240) {
+      newY += enemySpeed
+    }
+
+
+    if(goLeft){
+      newX += VELOCITY
+    }
+    if(goRight){
+      newX -= VELOCITY
+    }
+    if(goUp){
+      newY += VELOCITY
+    }
+    if(goDown){
+      newY -= VELOCITY
+    }
+
+    this.position.x = newX
+    this.position.y = newY
+    this.$elem.css('left', newX).css('top', newY)
+  }
 }
 
-const game = new Game(gameSettings);
-console.log('stored', randomX, randomY);
-game.addCharacter(p1Settings);
-console.log("finish P1 setting");
-startGame();
-console.log("game start");
+//running the Game
+function Game({ id, LOOP_INTERVAL }) {
+  this.$elem = $(id)
+  this.id = id
+  this.loop = null
+  this.enemies = []
+
+  // Handling Key Down
+  const handleKeyDown = (e) => {
+    setMapMovement(true, e.keyCode);
+  };
+
+  // Handling Key Up
+  const handleKeyUp = (e) => {
+    setMapMovement(false, e.keyCode);
+  };
+
+  //update the movement of everything
+  const updateMovements = () => {
+    moveMap()
+    updateMap()
+    this.enemies.forEach((Enemy) => {
+      Enemy.moveEnemy()
+    });
+  };
+
+  //add enemy
+  this.addEnemy = (setting) => {
+    this.enemies.push(new Enemy(setting, this.$elem));
+  };
+
+  //Start game and check key press
+  this.startGame = () => {
+    $(document).on("keydown", handleKeyDown);
+    $(document).on("keyup", handleKeyUp);
+    setInterval(updateMovements, LOOP_INTERVAL);
+  };
+}
+
+const game = new Game(gameSettings)
+game.addEnemy(p1Settings)
+game.startGame()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Level 1:
