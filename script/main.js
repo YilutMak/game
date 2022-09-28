@@ -18,7 +18,8 @@ let loop = null;
 // Character Related
 const ENEMY_WIDTH = 20;
 const ENEMY_HEIGHT = 20;
-const VELOCITY = 1;
+const VELOCITY = .8;
+let clientX, clientY;
 
 // Enemy Related
 let enemySpeed = 0.5;
@@ -99,7 +100,7 @@ const moveMap = () => {
 
 //updating map X,Y position
 const updateMap = () => {
-  $GameMap.offset({ top: xPosition, left: yPosition });
+  $GameMap.css({ top: xPosition, left: yPosition });
 };
 
 //random integer generator
@@ -200,13 +201,6 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
       newY += enemySpeed;
     }
 
-    //when zombie touches player, lose
-    if (newX <= 257 && newX >= 223) {
-      if (newY <= 250 && newY >= 230) {
-        //console.log('loser')
-      }
-    }
-
     //When player moves, the zombies are shifted too
     if (goLeft) {
       newX += VELOCITY;
@@ -268,8 +262,22 @@ function Bullet({ xVelocity, yVelocity }) {
     let bulletX = x;
     let bulletY = y;
 
+    // TODO Move bullet when character move
     bulletX += xVelocity;
     bulletY += yVelocity;
+
+    if (goLeft) {
+      bulletX += VELOCITY;
+    }
+    if (goRight) {
+      bulletX -= VELOCITY;
+    }
+    if (goUp) {
+      bulletY += VELOCITY;
+    }
+    if (goDown) {
+      bulletY -= VELOCITY;
+    }
 
     this.position.x = bulletX;
     this.position.y = bulletY;
@@ -323,16 +331,20 @@ function Game({ id, LOOP_INTERVAL }) {
     $(document).on("keydown", handleKeyDown);
     $(document).on("keyup", handleKeyUp);
     game.addEnemy(p1Settings);
-    game.addEnemy(p1Settings);
+    //agame.addEnemy(p1Settings);
     setInterval(updateMovements, LOOP_INTERVAL);
   };
 }
 
+$(document).on("mousemove", function (e) {
+  clientX = e.clientX;
+  clientY = e.clientY;
+});
+
 //shooting bullets towards your cursor
-$GameScreen.on("mousemove", function (e) {
-  if (shoot) {
-    const { clientX, clientY, currentTarget } = e;
-    const { left, top } = currentTarget.getBoundingClientRect();
+$(document).on("keypress", function (e) {
+  if (shoot && e.keyCode === 32) {
+    const { left, top } = $GameScreen[0].getBoundingClientRect();
     const mX = clientX - left;
     const mY = clientY - top;
 
@@ -352,51 +364,97 @@ $GameScreen.on("mousemove", function (e) {
 const hitBoxCheck = () => {
   let enemyXPosition;
   let enemyYPosition;
-  let bulletXPosition;
-  let bulletYPosition;
 
-  for (let i = 0; i < game.enemies.length; i++) {
-    enemyXPosition = game.enemies[i].position.x;
-    enemyYPosition = game.enemies[i].position.y;
+  for (let i = 0; i < game.bullets.length; i++) {
+    let bulletXPosition;
+    let bulletYPosition;
+    bulletXPosition = game.bullets[i].position.x;
+    bulletYPosition = game.bullets[i].position.y;
+    //console.log(bulletXPosition, bulletYPosition);
+    if (
+      bulletXPosition >= 500 ||
+      bulletXPosition <= 0 ||
+      bulletYPosition >= 500 ||
+      bulletYPosition <= 0
+    ) {
+      //console.log("out of range");
+      game.bullets[i].$elem.remove();
+      game.bullets.splice(i, 1);
+      i--;
+    }
+  }
+
+  for (let u = 0; u < game.enemies.length; u++) {
+    enemyXPosition = game.enemies[u].position.x;
+    enemyYPosition = game.enemies[u].position.y;
     if (
       enemyXPosition >= 230 &&
       enemyXPosition <= 260 &&
       enemyYPosition >= 230 &&
       enemyYPosition <= 260
-    ){
-      console.log('you lose')
+    ) {
+
+      for (let u = 0; u < game.enemies.length; u++) {
+      game.enemies[u].$elem.remove();
+      }
+      game.enemies.splice(u, game.enemies.length);
+      console.log('you lose');
     }
+    for (let i = 0; i < game.bullets.length; i++) {
+      let bulletXPosition;
+      let bulletYPosition;
+      bulletXPosition = game.bullets[i].position.x;
+      bulletYPosition = game.bullets[i].position.y;
+      if (
+        bulletXPosition <= enemyXPosition + 20 &&
+        bulletXPosition >= enemyXPosition &&
+        bulletYPosition <= enemyYPosition + 20 &&
+        bulletYPosition >= enemyYPosition
+      ) {
+        console.log("hit");
+        game.enemies[u].$elem.remove();
+        game.enemies.splice(u, 1);
+        u--;
+        console.log(game.enemies);
+      }
   }
 
-  for (let i = 0; i < game.bullets.length; i++) {
-    bulletXPosition = game.bullets[i].position.x;
-    bulletYPosition = game.bullets[i].position.y;
-    //console.log(bulletXPosition, bulletYPosition);
-    if (
-      bulletXPosition >= 400 ||
-      bulletXPosition <= 100 ||
-      bulletYPosition >= 400 ||
-      bulletYPosition <= 100
-    ) {
-      console.log("out of range");
-      game.bullets[i].$elem.remove();
-      game.bullets.splice(i,1)
-      i--
-    }
+
   }
+
   //console.log(enemyXPosition,enemyYPosition,bulletXPosition,bulletYPosition )
 };
 
+let seconds1 = 0
+let seconds2 = 0
+let minutes1 = 0
+let minutes2 = 0
+
+//timer start when game starts
+const timerStart = () => {
+  setInterval(() => {
+    seconds1 += 1
+    if(seconds1>9){
+      seconds1=0
+      seconds2+=1
+    }
+    if(seconds2>5){
+      seconds2=0
+      minutes1+=1
+    }
+    console.log(minutes2.toFixed(0) + minutes1.toFixed(0) +":"+seconds2.toFixed(0)+seconds1.toFixed(0))
+  }, 1000);
+}
+
 const game = new Game(gameSettings);
 game.startGame();
+timerStart()
+
+
 
 //Level 1:
 //Generate random zombies (loop)
-//  gradually spawn more as time increase
-//Add hit box for zombies
-//  If zombie touches player, game is over
-
-//  zombie disappears if hit by gun
+//gradually spawn more as time increase
 
 //Add game start screen
 //  show instructions

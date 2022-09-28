@@ -23,11 +23,11 @@
 
 </head>
 <body>
-<div id="game-start" style="display:none" /.class="m-3"./>
+<div id="game-start" /.style="display:none"./ class="">
   <h1 class="d-flex justify-content-center mb-2 ">Survive!</h1>
   <h5 class="d-flex justify-content-center mb-2 text-center">How long can you survive the apocalypse?</h5>
   <h7 class="d-flex justify-content-center mb-0 text-center">70% of the world population has been infected by the T virus. You must shoot and dodge all threats to survive...</h7>
-  <div style="background-color: aqua; border-radius: 10px;">
+  <div class="m-2" style="background-color: aqua; border-radius: 10px;">
     <div class="d-flex align-items-center justify-content-center ">
       <img id="wasd" src="images/wasd.jpg" alt="map">
       <h7>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use "<b>W</b>" "<b>A</b>" "<b>S</b>" "<b>D</b>" to <span class="text-success"><b>Move!</b></span></h7>
@@ -44,9 +44,10 @@
   </div>
 </div>
 
-  <div id="game-screen" /.class="m-3"./>
-    <img id="game-map" src="images/gamemap.jpg" alt="map">
+  <div id="game-screen" class=" position-relative">
+    <img id="game-map" class="position-absolute" src="images/gamemap.jpg" alt="map">
     <div id="player"><div>
+    <h4 id="timer" class="d-flex justify-content-center text-warning">00:00</h4>
   </div>
 
 </body>
