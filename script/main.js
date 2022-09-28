@@ -9,6 +9,11 @@ let mapHitLimitLeft = false;
 let mapHitLimitRight = false;
 let mapHitLimitTop = false;
 let mapHitLimitBottom = false;
+var gameaudio = new Audio('music/gamemusic.mp3');
+var gunaudio = new Audio('music/gunshot.mp3');
+var uhaudio = new Audio('music/uh.mp3');
+var diedaudio = new Audio('music/died.mp3');
+var clickdaudio = new Audio('music/click.mp3');
 
 // Game Loop Related
 const FPS = 60;
@@ -24,12 +29,15 @@ let minutes1 = 0;
 let minutes2 = 0;
 let gameTimeStart = false;
 const $timer = $("#timer");
+let timeCount = false
 
 // Character Related
 const ENEMY_WIDTH = 20;
 const ENEMY_HEIGHT = 20;
 const VELOCITY = 0.8;
 let clientX, clientY;
+let characterMovement = false
+let frames = 1
 
 // Enemy Related
 let enemySpeed = 0.5;
@@ -59,6 +67,12 @@ let CenterY = GAME_WIDTH / 2 - ENEMY_WIDTH / 2;
 let randomX = null;
 let randomY = null;
 
+const playerFrames = () =>{
+    setTimeout(() => { $Player.attr("src","images/leon1.png") }, 200);
+    $Player.attr("src","images/leon2.png")
+}
+
+
 //set character direction
 const setMapMovement = (value, keyCode) => {
   if (keyCode === keyLeft) {
@@ -80,8 +94,8 @@ const setMapMovement = (value, keyCode) => {
 
 //Increasing map X,Y coordinates
 const moveMap = () => {
-  console.log(travelX, travelY, mapHitLimitTop);
 
+  //console.log(travelX, travelY, mapHitLimitTop);
   if (goLeft) {
     if (travelY < 888) {
       yPosition += VELOCITY;
@@ -140,7 +154,10 @@ const moveMap = () => {
 
 //updating map X,Y position
 const updateMap = () => {
-  $GameMap.css({ top: xPosition, left: yPosition });
+
+  if (characterMovement===true) {
+    $GameMap.css({ top: xPosition, left: yPosition });
+  }
 };
 
 //random integer generator
@@ -192,6 +209,7 @@ const p1Settings = {
 function Enemy({ initDimension, initVelocity, initBackground }) {
   const { randomX, randomY } = generateRandom();
   this.$elem = null;
+  this.src = 'images/zombie1.png'
   this.id = `_${Math.random().toString(36).substring(2, 15)}`;
   this.dimension = initDimension;
   this.velocity = initVelocity;
@@ -226,6 +244,11 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
 
     let newX = x;
     let newY = y;
+
+
+
+
+
 
     //zombie move towards player
     if (newX > 240) {
@@ -339,6 +362,7 @@ function Game({ id, LOOP_INTERVAL }) {
   const handleKeyDown = (e) => {
     setMapMovement(true, e.keyCode);
     gameTimeStart = true;
+    playerFrames()
   };
 
   // Handling Key Up
@@ -373,7 +397,6 @@ function Game({ id, LOOP_INTERVAL }) {
   this.startGame = () => {
     $(document).on("keydown", handleKeyDown);
     $(document).on("keyup", handleKeyUp);
-    timerStart();
     //game.addEnemy(p1Settings);
     setInterval(updateMovements, LOOP_INTERVAL);
   };
@@ -387,6 +410,7 @@ $(document).on("mousemove", function (e) {
 //shooting bullets towards your cursor
 $(document).on("keypress", function (e) {
   if (shoot && e.keyCode === 32) {
+    gunaudio.play();
     const { left, top } = $GameScreen[0].getBoundingClientRect();
     const mX = clientX - left;
     const mY = clientY - top;
@@ -441,6 +465,14 @@ const hitBoxCheck = () => {
       }
       game.enemies.splice(u, game.enemies.length);
       //console.log('you lose');
+      $GameOvertimer.text('Highscore: '+
+      minutes2.toFixed(0) +
+        minutes1.toFixed(0) +
+        seconds2.toFixed(0) +
+        seconds1.toFixed(0))
+      $GameScreen.hide()
+      diedaudio.play();
+      resetGame()
     }
     for (let i = 0; i < game.bullets.length; i++) {
       let bulletXPosition;
@@ -453,11 +485,12 @@ const hitBoxCheck = () => {
         bulletYPosition <= enemyYPosition + 20 &&
         bulletYPosition >= enemyYPosition
       ) {
-        console.log("hit");
+        uhaudio.play();
+        //console.log("hit");
         game.enemies[u].$elem.remove();
         game.enemies.splice(u, 1);
         u--;
-        console.log(game.enemies);
+        //console.log(game.enemies);
       }
     }
   }
@@ -468,11 +501,14 @@ const hitBoxCheck = () => {
 var zombieSpawn = 1;
 let zombieCount = 0;
 
-//timer start when game starts
+
+
+
+
 
 const timerStart = () => {
-  setInterval(() => {
-    seconds1 += 1;
+if(timeCount === true){
+seconds1 += 1;
     if (seconds1 > 9) {
       seconds1 = 0;
       seconds2 += 1;
@@ -499,22 +535,68 @@ const timerStart = () => {
       zombieSpawn += 1;
       zombieCount--;
     }
-  }, 1000);
-};
+}
+}
+
+
+function timeStop() {
+  clearInterval(timerStart);
+}
+
+
+//timer start when game starts
+
+
 
 const game = new Game(gameSettings);
-game.startGame();
+
 
 const $startButton = $("#startbutton");
+const $StartScreen = $("#game-start");
+const $GameOverScreen = $("#game-over")
+const $GameOvertimer = $("#gameovertimer")
+const $Retry = $("#tryagain")
+const $Player = $("#player")
 
-$(document).on("click", $startButton, function (e) {
-  console.log("game started");
+
+$startButton.on("click", $startButton, function (e) {
+  game.startGame();
+  $GameScreen.show()
+  $StartScreen.hide()
+  $GameOverScreen.hide()
+  timeCount = true
+  characterMovement = true
+  gameaudio.play();
 });
 
-//Level 1:
-//Generate random zombies (loop)
-//gradually spawn more as time increase
 
+$Retry.on("click", $Retry, function (e) {
+  $GameOverScreen.hide()
+  $StartScreen.show()
+
+});
+
+const timeInterval = setInterval(timerStart, 1000);
+
+const resetGame = () => {
+  gameaudio.pause();
+  $GameOverScreen.show()
+  clearInterval(timeInterval)
+  characterMovement = false
+  timeCount = false
+  zombieCount=0
+  zombieSpawn=0
+  seconds1 = 0
+  seconds2 = 0
+  minutes1 = 0
+  minutes2 = 0
+  xPosition = -875;
+  yPosition = -875;
+}
+
+$GameOverScreen.hide()
+
+//Level 1:
 //Add game start screen
 //  show instructions
 
