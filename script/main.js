@@ -33,14 +33,14 @@ let goLeft = false;
 let goUp = false;
 let goRight = false;
 let goDown = false;
-let shoot = false
+let shoot = false;
 let keyLeft = 65;
 let KeyUp = 87;
 let KeyRight = 68;
 let KeyDown = 83;
 let KeySpace = 32;
-let travelY = 0
-let travelX = 0
+let travelY = 0;
+let travelX = 0;
 
 //zombies
 let CenterX = GAME_HEIGHT / 2 - ENEMY_HEIGHT / 2;
@@ -67,47 +67,47 @@ const setMapMovement = (value, keyCode) => {
   }
 };
 
-//Moving the map
+//Increasing map X,Y coordinates
 const moveMap = () => {
-
   if (goLeft) {
-    if(travelY < 888){
-    yPosition += VELOCITY
-    travelY += VELOCITY
+    if (travelY < 888) {
+      yPosition += VELOCITY;
+      travelY += VELOCITY;
     }
-
-
   }
   if (goRight) {
-    if(travelY > -892){
-    yPosition -= VELOCITY;
-    travelY -= VELOCITY
+    if (travelY > -892) {
+      yPosition -= VELOCITY;
+      travelY -= VELOCITY;
     }
   }
 
   if (goUp) {
-    if(travelX > -891){
-    xPosition += VELOCITY;
-    travelX -= VELOCITY
+    if (travelX > -891) {
+      xPosition += VELOCITY;
+      travelX -= VELOCITY;
     }
   }
 
   if (goDown) {
-    if(travelX < 890){
-    xPosition -= VELOCITY;
-    travelX += VELOCITY
+    if (travelX < 890) {
+      xPosition -= VELOCITY;
+      travelX += VELOCITY;
     }
   }
 };
 
+//updating map X,Y position
 const updateMap = () => {
   $GameMap.offset({ top: xPosition, left: yPosition });
 };
 
+//random integer generator
 const randomInt = (max) => {
   return Math.floor(Math.random() * max);
 };
 
+//generate random position
 const generateRandom = () => {
   let randomX;
   let randomY;
@@ -137,6 +137,7 @@ const generateRandom = () => {
   return { randomX, randomY };
 };
 
+//enemy profile
 const p1Settings = {
   initDimension: {
     w: ENEMY_WIDTH,
@@ -226,6 +227,7 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
   };
 }
 
+//creating bullets
 function Bullet({ xVelocity, yVelocity }) {
   this.$elem = null;
   this.id = `_${Math.random().toString(36).substring(2, 15)}`;
@@ -303,6 +305,7 @@ function Game({ id, LOOP_INTERVAL }) {
     this.bullets.forEach((Bullet) => {
       Bullet.moveBullet();
     });
+    hitBoxCheck();
   };
 
   //add enemy
@@ -319,43 +322,77 @@ function Game({ id, LOOP_INTERVAL }) {
   this.startGame = () => {
     $(document).on("keydown", handleKeyDown);
     $(document).on("keyup", handleKeyUp);
+    game.addEnemy(p1Settings);
+    game.addEnemy(p1Settings);
     setInterval(updateMovements, LOOP_INTERVAL);
   };
 }
 
-const game = new Game(gameSettings);
-game.addEnemy(p1Settings);
-game.addEnemy(p1Settings);
-game.startGame();
-
+//shooting bullets towards your cursor
 $GameScreen.on("mousemove", function (e) {
-
-  if(shoot){
+  if (shoot) {
     const { clientX, clientY, currentTarget } = e;
     const { left, top } = currentTarget.getBoundingClientRect();
     const mX = clientX - left;
     const mY = clientY - top;
 
-    const dX = mX - 250
-    const dY = mY - 250
-    const l = Math.sqrt(dX * dX + dY * dY)
+    const dX = mX - 250;
+    const dY = mY - 250;
+    const l = Math.sqrt(dX * dX + dY * dY);
 
     game.addBullet({
       yVelocity: dY / l,
       xVelocity: dX / l,
     });
-    shoot = false
+    shoot = false;
   }
 });
 
+//check hit box of enemies, bullets and player
+const hitBoxCheck = () => {
+  let enemyXPosition;
+  let enemyYPosition;
+  let bulletXPosition;
+  let bulletYPosition;
 
+  for (let i = 0; i < game.enemies.length; i++) {
+    enemyXPosition = game.enemies[i].position.x;
+    enemyYPosition = game.enemies[i].position.y;
+    if (
+      enemyXPosition >= 230 &&
+      enemyXPosition <= 260 &&
+      enemyYPosition >= 230 &&
+      enemyYPosition <= 260
+    ){
+      console.log('you lose')
+    }
+  }
 
+  for (let i = 0; i < game.bullets.length; i++) {
+    bulletXPosition = game.bullets[i].position.x;
+    bulletYPosition = game.bullets[i].position.y;
+    //console.log(bulletXPosition, bulletYPosition);
+    if (
+      bulletXPosition >= 400 ||
+      bulletXPosition <= 100 ||
+      bulletYPosition >= 400 ||
+      bulletYPosition <= 100
+    ) {
+      console.log("out of range");
+      game.bullets[i].$elem.remove();
+      game.bullets.splice(i,1)
+      i--
+    }
+  }
+  //console.log(enemyXPosition,enemyYPosition,bulletXPosition,bulletYPosition )
+};
 
+const game = new Game(gameSettings);
+game.startGame();
 
 //Level 1:
 //Generate random zombies (loop)
 //  gradually spawn more as time increase
-
 //Add hit box for zombies
 //  If zombie touches player, game is over
 
