@@ -25,29 +25,29 @@
 <body>
 <div id="game-start" >
   <h1 class="d-flex justify-content-center mb-2 text-danger">Survive!</h1>
-  <h5 class="d-flex justify-content-center mb-2 text-center text-danger">How long can you survive the apocalypse?</h5>
-  <h7 class="d-flex justify-content-center mb-0 text-center text-danger">70% of the world population has been infected by the T virus. You must shoot and dodge all threats to survive...</h7>
-  <div class="m-2" style="background-color: rgb(206, 206, 206); border-radius: 10px;">
+  <h5 class="d-flex justify-content-center mb-2 text-center text-muted">How long can you survive the apocalypse?</h5>
+  <h7 class="d-flex justify-content-center mb-0 text-center text-muted">70% of the world population has been infected by the T virus. You must shoot and dodge all threats to survive...</h7>
+  <div class="m-2" style="background-color: rgba(198, 1, 1, 0.548); border-radius: 10px;">
     <div class="d-flex align-items-center justify-content-center ">
       <img id="wasd" src="images/wasd.png" alt="map">
-      <h7>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use "<b>W</b>" "<b>A</b>" "<b>S</b>" "<b>D</b>" to <span class="text-success text-danger"><b>Move!</b></span></h7>
+      <h7 class="text-light">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use <b>W</b> <b>A</b> <b>S</b> <b>D</b> to <span class=" text-white"><b>Move!</b></span></h7>
     </div>
     <div class="d-flex justify-content-center">
       <img id="cursor" src="images/cursor.png" alt="map">
-      <h7>&nbsp;&nbsp;Use "<b>Cursor</b>" to aim...&nbsp;</h7>
+      <h7 class="text-light">&nbsp;&nbsp;Use <b>Cursor</b> to aim...&nbsp;</h7>
       <img id="spacebar" class="mb-4" src="images/spacebar.png" alt="map">
-      <h7>&nbsp;And "<b>Spacebar</b>" to <span class="text-danger"><b>Shoot!</b></span></h7>
+      <h7 class="text-light">&nbsp;And <b>Spacebar</b> to <span class="text-white"><b>Shoot!</b></span></h7>
     </div>
   </div>
   <div class="d-flex justify-content-center">
-    <button id="startbutton" type="button" class="btn btn-danger btn-lg mt-4">   START GAME   </button>
+    <button id="startbutton" type="button" class="btn btn-danger text-white btn-lg mt-4">  <b>START GAME</b>    </button>
   </div>
 </div>
 
 <div id="game-over" class="" style="display:none !important">
 
-  <h1 id="youdied" class="d-flex text-danger justify-content-center">You Died...</h1>
-  <h2 id="gameovertimer" class="d-flex justify-content-center text-warning mt-3">00:00</h2>
+  <h1 id="youdied" class="d-flex text-danger justify-content-center mb-3">You Died...</h1>
+  <h2 id="gameovertimer" class="d-flex justify-content-center text-light mt-3">00:00</h2>
   <div class="d-flex justify-content-center" >
     <button id="tryagain" type="button" class=" btn btn-danger btn-lg mt-4"> Try Again?...</button>
   </div>
@@ -58,9 +58,9 @@
     <img id="game-map" class="position-absolute" src="images/gamemap.jpg" alt="map">
     <img id="player" class="position-absolute" src="images/leon1.png" alt="map">
     <div id="timerbox" class="d-flex justify-content-center align-items-center mt-2 ml-2">
-      <h1 id="timer" class="d-flex justify-content-center align-items-center text-warning mr-2 ml-2">00:00</h1>
+      <h1 id="timer" class="d-flex justify-content-center align-items-center text-danger mr-2 ml-2">00:00</h1>
       <img id="zombieicon" class="m-0 align-middle" src="images/zombie1.png" alt="map">
-      <h3 id="hitcount" class="align-middle mb-0 mr-2">x0</h3>
+      <h3 id="hitcount" class="align-middle ml-2 mb-0 mr-2 text-danger">x0</h3>
     </div>
 
   </div>

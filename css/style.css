@@ -1,5 +1,6 @@
 body {
   background-color: rgb(29, 29, 29);
+  font-family: Arial;
 }
 
 #game-start {
@@ -7,6 +8,9 @@ body {
   height: 500px;
   overflow: hidden;
   margin: 0 auto;
+  border-style: solid;
+  border-width: 10px;
+  color: rgb(46, 46, 46);
 }
 
 #game-screen {
@@ -15,6 +19,9 @@ body {
   position: absolute;
   overflow: hidden;
   margin: 0 auto;
+  border-style: solid;
+  border-width: 10px;
+  color: rgb(46, 46, 46);
 }
 
 #game-over {
@@ -23,7 +30,9 @@ body {
   overflow: hidden;
   margin: 0 auto;
   background-color: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  border-style: solid;
+  border-width: 10px;
+  color: rgb(46, 46, 46);
 }
 
 #youdied {

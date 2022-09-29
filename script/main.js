@@ -173,6 +173,7 @@ const moveMap = () => {
 //updating map X,Y position
 const updateMap = () => {
   if (characterMovement === true) {
+    console.log(xPosition,yPosition)
     $GameMap.css({ top: xPosition, left: yPosition });
   }
 };
@@ -222,7 +223,6 @@ const p1Settings = {
   initBackground: "blue",
 };
 
-//this.prepend('<img id="zombie" src="images/zombie1.png" />')
 
 //Enemies
 function Enemy({ initDimension, initVelocity, initBackground }) {
@@ -496,7 +496,7 @@ const hitBoxCheck = () => {
       game.enemies.splice(0, game.enemies.length);
       //console.log('lose')
       scoreCalculate();
-      console.log(finalScore);
+      //console.log(finalScore);
       $GameOvertimer.text("Your Score: " + finalScore);
       $GameScreen.hide();
       gameaudio.pause();
@@ -504,6 +504,10 @@ const hitBoxCheck = () => {
       $GameOverScreen.show();
       timeCount = false;
       clearInterval(interval);
+      //$GameOverScreen.css("background-image", 'url("images/gamemap.jpg")')
+      //$GameOverScreen.css('background-position',`${xPosition}px ${yPosition}px`)
+    $GameOverScreen.css('background-position:',`top ${xPosition}px left ${yPosition}px`)
+
     }
     for (let i = 0; i < game.bullets.length; i++) {
       let bulletXPosition;
@@ -528,17 +532,12 @@ const hitBoxCheck = () => {
       }
     }
   }
-
-  //console.log(enemyXPosition,enemyYPosition,bulletXPosition,bulletYPosition )
 };
-
-let trigger = 0;
 
 //timer start when game starts
 const timerStart = () => {
   if (timeCount === true) {
     seconds1 += 0.003;
-    trigger++;
     if (seconds1 > 9) {
       seconds1 = 0;
       seconds2 += 1;
@@ -554,13 +553,6 @@ const timerStart = () => {
         seconds2.toFixed(0) +
         seconds1.toFixed(0)
     );
-    //console.log(
-    //  minutes2.toFixed(0) +
-    //    minutes1.toFixed(0) +
-    //    ":" +
-    //    seconds2.toFixed(0) +
-    //    seconds1.toFixed(0)
-    //);
 
     //when timer hits 5 seconds spawn new set of zombies
     if (seconds1) {
@@ -667,6 +659,7 @@ const resetGame = () => {
   $GameOverScreen.hide();
 };
 
+//calculate User final score
 const scoreCalculate = () => {
   finalScore += seconds1.toFixed(0) * 5;
   finalScore += seconds2.toFixed(0) * 10;
@@ -677,12 +670,3 @@ const scoreCalculate = () => {
 };
 
 const game = new Game(gameSettings);
-
-//how to hide screen
-//how to add image to constructor
-//how to align css
-
-//Level 2:
-//Add lvl up
-//Add upgrades
-//Add drops
