@@ -10,7 +10,8 @@ let mapHitLimitRight = false;
 let mapHitLimitTop = false;
 let mapHitLimitBottom = false;
 let zombiesHit = 0;
-var gameaudio = new Audio("music/gamemusic2.mp3");
+var startScreenaudio = new Audio("music/startScreen.mp3");
+var gameaudio = new Audio("music/gamemusic3.mp3");
 var gunaudio = new Audio("music/gunshot2.mp3");
 var uhaudio = new Audio("music/uh2.mp3");
 var diedaudio = new Audio("music/died.mp3");
@@ -90,9 +91,9 @@ let randomY = null;
 
 const playerFrames = () => {
   setTimeout(() => {
-    $Player.attr("src", "images/leon1.png");
+    $Player.attr("src", "images/leon3.png");
   }, 200);
-  $Player.attr("src", "images/leon2.png");
+  $Player.attr("src", "images/leon4.png");
 };
 
 //set character direction
@@ -173,6 +174,7 @@ const moveMap = () => {
 //updating map X,Y position
 const updateMap = () => {
   if (characterMovement === true) {
+    //console.log(xPosition,yPosition)
     $GameMap.css({ top: xPosition, left: yPosition });
   }
 };
@@ -222,8 +224,6 @@ const p1Settings = {
   initBackground: "blue",
 };
 
-//this.prepend('<img id="zombie" src="images/zombie1.png" />')
-
 //Enemies
 function Enemy({ initDimension, initVelocity, initBackground }) {
   const { randomX, randomY } = generateRandom();
@@ -246,10 +246,11 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
     this.$elem = $(`<div id="${id}"></div>`)
       .css("left", x)
       .css("top", y)
-      .css("background", 'url("images/zombie1.png")')
+      .css("background", 'url("images/zombie3.png")')
       .css("width", w)
       .css("height", h)
       .css("position", "absolute")
+      .css("filter", "drop-shadow(3px 2px 1px #150634ab)")
       .appendTo("#game-screen");
   };
 
@@ -327,6 +328,8 @@ function Bullet({ xVelocity, yVelocity }) {
       .css("width", w)
       .css("height", h)
       .css("position", "absolute")
+      .css("border-radius", "5px")
+      .css("filter", "drop-shadow(2px 1px 2px #150634ab)")
       .appendTo("#game-screen");
   };
 
@@ -370,6 +373,8 @@ function Game({ id, LOOP_INTERVAL }) {
   this.loop = null;
   this.enemies = [];
   this.bullets = [];
+
+  startScreenaudio.play();
 
   // Handling Key Down
   const handleKeyDown = (e) => {
@@ -423,6 +428,7 @@ function Game({ id, LOOP_INTERVAL }) {
   this.startGame = () => {
     $(document).on("keydown", handleKeyDown);
     $(document).on("keyup", handleKeyUp);
+    startScreenaudio.pause();
     interval = setInterval(updateMovements, LOOP_INTERVAL);
   };
 }
@@ -496,14 +502,20 @@ const hitBoxCheck = () => {
       game.enemies.splice(0, game.enemies.length);
       //console.log('lose')
       scoreCalculate();
-      console.log(finalScore);
-      $GameOvertimer.text("Your Score: " + finalScore);
+      //console.log(finalScore);
+      $GameOvertimer.text("HighScore: " + finalScore);
       $GameScreen.hide();
       gameaudio.pause();
       diedaudio.play();
       $GameOverScreen.show();
       timeCount = false;
       clearInterval(interval);
+      //$GameOverScreen.css("background-image", 'url("images/gamemap.jpg")')
+      //$GameOverScreen.css('background-position',`${xPosition}px ${yPosition}px`)
+      $GameOverScreen.css(
+        "background-position:",
+        `top ${xPosition}px left ${yPosition}px`
+      );
     }
     for (let i = 0; i < game.bullets.length; i++) {
       let bulletXPosition;
@@ -528,17 +540,12 @@ const hitBoxCheck = () => {
       }
     }
   }
-
-  //console.log(enemyXPosition,enemyYPosition,bulletXPosition,bulletYPosition )
 };
-
-let trigger = 0;
 
 //timer start when game starts
 const timerStart = () => {
   if (timeCount === true) {
     seconds1 += 0.003;
-    trigger++;
     if (seconds1 > 9) {
       seconds1 = 0;
       seconds2 += 1;
@@ -554,13 +561,6 @@ const timerStart = () => {
         seconds2.toFixed(0) +
         seconds1.toFixed(0)
     );
-    //console.log(
-    //  minutes2.toFixed(0) +
-    //    minutes1.toFixed(0) +
-    //    ":" +
-    //    seconds2.toFixed(0) +
-    //    seconds1.toFixed(0)
-    //);
 
     //when timer hits 5 seconds spawn new set of zombies
     if (seconds1) {
@@ -665,8 +665,10 @@ const resetGame = () => {
   xPosition = -875;
   yPosition = -875;
   $GameOverScreen.hide();
+  startScreenaudio.play();
 };
 
+//calculate User final score
 const scoreCalculate = () => {
   finalScore += seconds1.toFixed(0) * 5;
   finalScore += seconds2.toFixed(0) * 10;
@@ -677,12 +679,3 @@ const scoreCalculate = () => {
 };
 
 const game = new Game(gameSettings);
-
-//how to hide screen
-//how to add image to constructor
-//how to align css
-
-//Level 2:
-//Add lvl up
-//Add upgrades
-//Add drops
