@@ -61,7 +61,12 @@ let cooldown = 0
 let cooldown2 = 0
 let cooldown3 = 0
 let cooldown4 = 0
-
+let cooldown5 = 0
+let cooldown6 = 0
+let cooldown7 = 0
+let cooldown8 = 0
+let cooldown9 = 0
+let cooldown10 = 0
 
 // Movement Related
 let goLeft = false;
@@ -387,6 +392,13 @@ function Game({ id, LOOP_INTERVAL }) {
     cooldown2 += 1
     cooldown3 += 1
     cooldown4 += 1
+    cooldown5 += 1
+    cooldown6 += 1
+    cooldown7 += 1
+    cooldown8 += 1
+    cooldown9 += 1
+    cooldown10 += 1
+
     //console.log(cooldown2)
     this.enemies.forEach((Enemy) => {
       Enemy.moveEnemy();
@@ -562,48 +574,51 @@ const timerStart = () => {
     }
     }
     if (seconds2) {
-      if (cooldown3 >= 100){
+      if (cooldown3 >= 500){
         game.addEnemy(p1Settings);
         cooldown3 = 0
       }
     }
     if (seconds2>=2) {
-      if (cooldown3 >= 100){
+      if (cooldown4 >= 500){
         game.addEnemy(p1Settings);
-        cooldown3 = 0
+        cooldown4 = 0
+      }
+    }
+    if (seconds2>=3) {
+      if (cooldown5 >= 500){
+        game.addEnemy(p1Settings);
+        cooldown5 = 0
       }
     }
     if (seconds2>=4) {
-      if (cooldown3 >= 100){
+      if (cooldown10 >= 200){
         game.addEnemy(p1Settings);
-        game.addEnemy(p1Settings);
-        cooldown3 = 0
+        cooldown10 = 0
     }
     }
     if (minutes1) {
-      if (cooldown3 >= 50){
+      if (cooldown6 >= 100){
         game.addEnemy(p1Settings);
-        game.addEnemy(p1Settings);
-        game.addEnemy(p1Settings);
-        cooldown3 = 0
+        cooldown6 = 0
       }
     }
     if (minutes1>2) {
-      if (cooldown3 >= 50){
+      if (cooldown7 >= 25){
         game.addEnemy(p1Settings);
-        cooldown3 = 0
+        cooldown7 = 0
     }
     }
     if (minutes1>3) {
-      if (cooldown3 >= 50){
+      if (cooldown8 >= 25){
         game.addEnemy(p1Settings);
-        cooldown3 = 0
+        cooldown8 = 0
     }
     }
     if (minutes1>4) {
-      if (cooldown3 >= 50){
+      if (cooldown9 >= 25){
         game.addEnemy(p1Settings);
-        cooldown3 = 0
+        cooldown9 = 0
     }
     }
   }
