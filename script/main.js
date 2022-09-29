@@ -25,19 +25,22 @@ const $Hitcount = $("#hitcount");
 
 // Game Loop Related
 const FPS = 60;
-const LOOP_INTERVAL = Math.round(1000 / FPS);
-const gameSettings = {
-  id: "#game-screen",
-  loopInterval: LOOP_INTERVAL,
-};
+const LOOP_INTERVAL = 1000;
+let interval
 let loop = null;
 let seconds1 = 0;
 let seconds2 = 0;
 let minutes1 = 0;
 let minutes2 = 0;
+let finalScore = 0
 let gameTimeStart = false;
 const $timer = $("#timer");
 let timeCount = false;
+const gameSettings = {
+  id: "#game-screen",
+  loopInterval: LOOP_INTERVAL,
+  //Math.round(1000 / FPS);
+};
 
 // Character Related
 const ENEMY_WIDTH = 20;
@@ -48,14 +51,17 @@ let characterMovement = false;
 let frames = 1;
 
 // Enemy Related
-let enemySpeed = 0.5;
-var zombieSpawn = 1;
-let zombieCount = 0;
+let enemySpeed = 0.1;
 
 // Bullet Related
 const BULLET_WIDTH = 4;
 const BULLET_HEIGHT = 4;
 const BVELOCITY = 0.5;
+let cooldown = 0
+let cooldown2 = 0
+let cooldown3 = 0
+let cooldown4 = 0
+
 
 // Movement Related
 let goLeft = false;
@@ -235,7 +241,7 @@ function Enemy({ initDimension, initVelocity, initBackground }) {
     this.$elem = $(`<div id="${id}"></div>`)
       .css("left", x)
       .css("top", y)
-      .css("background", background)
+      .css("background", 'url("images/zombie1.png")')
       .css("width", w)
       .css("height", h)
       .css("position", "absolute")
@@ -374,8 +380,14 @@ function Game({ id, LOOP_INTERVAL }) {
 
   //update the movement of everything
   const updateMovements = () => {
+    timerStart();
     moveMap();
     updateMap();
+    cooldown += 1
+    cooldown2 += 1
+    cooldown3 += 1
+    cooldown4 += 1
+    //console.log(cooldown2)
     this.enemies.forEach((Enemy) => {
       Enemy.moveEnemy();
     });
@@ -399,8 +411,7 @@ function Game({ id, LOOP_INTERVAL }) {
   this.startGame = () => {
     $(document).on("keydown", handleKeyDown);
     $(document).on("keyup", handleKeyUp);
-    //game.addEnemy(p1Settings);
-    setInterval(updateMovements, LOOP_INTERVAL);
+    interval = setInterval(updateMovements, LOOP_INTERVAL);
   };
 }
 
@@ -410,9 +421,12 @@ $(document).on("mousemove", function (e) {
   clientY = e.clientY;
 });
 
+
 //shooting bullets towards your cursor
 $(document).on("keypress", function (e) {
-  if (shoot && e.keyCode === 32) {
+  if (cooldown > 40) {
+    if (shoot && e.keyCode === 32) {
+    gunaudio.currentTime = 0
     gunaudio.play();
     const { left, top } = $GameScreen[0].getBoundingClientRect();
     const mX = clientX - left;
@@ -427,6 +441,8 @@ $(document).on("keypress", function (e) {
       xVelocity: dX / l,
     });
     shoot = false;
+  }
+  cooldown = 0
   }
 });
 
@@ -466,19 +482,20 @@ const hitBoxCheck = () => {
       for (let u = 0; u < game.enemies.length; u++) {
         game.enemies[u].$elem.remove();
       }
-      game.enemies.splice(u, game.enemies.length);
-      //console.log('you lose');
+      game.enemies.splice(0, game.enemies.length);
+      //console.log('lose')
+      scoreCalculate()
+      console.log(finalScore);
       $GameOvertimer.text(
-        "Highscore: " +
-          minutes2.toFixed(0) +
-          minutes1.toFixed(0) +
-          seconds2.toFixed(0) +
-          seconds1.toFixed(0)
+        "Your Score: " +
+          finalScore
       );
       $GameScreen.hide();
+      gameaudio.pause()
       diedaudio.play();
       $GameOverScreen.show();
       timeCount = false;
+      clearInterval(interval);
     }
     for (let i = 0; i < game.bullets.length; i++) {
       let bulletXPosition;
@@ -491,6 +508,7 @@ const hitBoxCheck = () => {
         bulletYPosition <= enemyYPosition + 20 &&
         bulletYPosition >= enemyYPosition
       ) {
+        uhaudio.currentTime = 0
         uhaudio.play();
         //console.log("hit");
         zombiesHit += 1;
@@ -506,10 +524,13 @@ const hitBoxCheck = () => {
   //console.log(enemyXPosition,enemyYPosition,bulletXPosition,bulletYPosition )
 };
 
+let trigger = 0;
+
 //timer start when game starts
 const timerStart = () => {
   if (timeCount === true) {
-    seconds1 += 1;
+    seconds1 += 0.003;
+    trigger++;
     if (seconds1 > 9) {
       seconds1 = 0;
       seconds2 += 1;
@@ -525,25 +546,68 @@ const timerStart = () => {
         seconds2.toFixed(0) +
         seconds1.toFixed(0)
     );
-    console.log(
-      minutes2.toFixed(0) +
-        minutes1.toFixed(0) +
-        ":" +
-        seconds2.toFixed(0) +
-        seconds1.toFixed(0)
-    );
+    //console.log(
+    //  minutes2.toFixed(0) +
+    //    minutes1.toFixed(0) +
+    //    ":" +
+    //    seconds2.toFixed(0) +
+    //    seconds1.toFixed(0)
+    //);
+
     //when timer hits 5 seconds spawn new set of zombies
-    if (seconds1 === 4 || 8) {
-      zombieCount += zombieSpawn;
-      //console.log(zombieSpawn)
+    if (seconds1) {
+      if (cooldown2 >= 500){
+        game.addEnemy(p1Settings);
+        cooldown2 = 0
     }
-    if (zombieCount > 0) {
-      game.addEnemy(p1Settings);
-      zombieSpawn += 1;
-      zombieCount--;
+    }
+    if (seconds2) {
+      if (cooldown3 >= 100){
+        game.addEnemy(p1Settings);
+        cooldown3 = 0
+      }
+    }
+    if (seconds2>=2) {
+      if (cooldown3 >= 100){
+        game.addEnemy(p1Settings);
+        cooldown3 = 0
+      }
+    }
+    if (seconds2>=4) {
+      if (cooldown3 >= 100){
+        game.addEnemy(p1Settings);
+        game.addEnemy(p1Settings);
+        cooldown3 = 0
+    }
+    }
+    if (minutes1) {
+      if (cooldown3 >= 50){
+        game.addEnemy(p1Settings);
+        game.addEnemy(p1Settings);
+        game.addEnemy(p1Settings);
+        cooldown3 = 0
+      }
+    }
+    if (minutes1>2) {
+      if (cooldown3 >= 50){
+        game.addEnemy(p1Settings);
+        cooldown3 = 0
+    }
+    }
+    if (minutes1>3) {
+      if (cooldown3 >= 50){
+        game.addEnemy(p1Settings);
+        cooldown3 = 0
+    }
+    }
+    if (minutes1>4) {
+      if (cooldown3 >= 50){
+        game.addEnemy(p1Settings);
+        cooldown3 = 0
+    }
     }
   }
-};
+}
 
 //function to stop timer
 function timeStop() {
@@ -559,40 +623,49 @@ $startButton.on("click", $startButton, function (e) {
   $GameOverScreen.hide();
   timeCount = true;
   characterMovement = true;
+  gameaudio.currentTime = 0
   gameaudio.play();
 });
 
 //Retry button to bring you back to start screen
 $Retry.on("click", $Retry, function (e) {
+  //console.log(game.enemies)
+  clickdaudio.play();
   $StartScreen.show();
+  $GameOverScreen.hide();
   resetGame();
 });
 
 //reset all values for the game to start a new game
 const resetGame = () => {
-  gameaudio.pause();
-  clearInterval(timeInterval);
+  console.log("reset");
+  //clearInterval(timeInterval);
   characterMovement = false;
-  zombieCount = 0;
-  zombieSpawn = 0;
   seconds1 = 0;
   seconds2 = 0;
   minutes1 = 0;
   minutes2 = 0;
+  travelY = 0;
+  travelX = 0;
+  finalScore = 0
+  $timer.text("00:00");
   zombiesHit = 0;
+  $Hitcount.text("x" + zombiesHit);
   xPosition = -875;
   yPosition = -875;
   $GameOverScreen.hide();
 };
 
+const scoreCalculate = () => {
+finalScore += seconds1.toFixed(0) * 5
+finalScore += seconds2.toFixed(0) * 10
+finalScore += minutes1.toFixed(0) * 1000
+finalScore += minutes2.toFixed(0) * 1000000
+finalScore += zombiesHit.toFixed(0) * 5
+console.log(finalScore)
+}
+
 const game = new Game(gameSettings);
-const timeInterval = setInterval(timerStart, 1000);
-
-
-
-
-
-
 
 
 //how to hide screen

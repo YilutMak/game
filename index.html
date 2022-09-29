@@ -30,7 +30,7 @@
   <div class="m-2" style="background-color: rgb(206, 206, 206); border-radius: 10px;">
     <div class="d-flex align-items-center justify-content-center ">
       <img id="wasd" src="images/wasd.png" alt="map">
-      <h7>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use "<b>W</b>" "<b>A</b>" "<b>S</b>" "<b>D</b>" to <span class="text-success text-warning"><b>Move!</b></span></h7>
+      <h7>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use "<b>W</b>" "<b>A</b>" "<b>S</b>" "<b>D</b>" to <span class="text-success text-danger"><b>Move!</b></span></h7>
     </div>
     <div class="d-flex justify-content-center">
       <img id="cursor" src="images/cursor.png" alt="map">
@@ -44,7 +44,8 @@
   </div>
 </div>
 
-<div id="game-over" class="d-flex flex-column justify-content-center" style="display:none !important">
+<div id="game-over" class="" style="display:none !important">
+
   <h1 id="youdied" class="d-flex text-danger justify-content-center">You Died...</h1>
   <h2 id="gameovertimer" class="d-flex justify-content-center text-warning mt-3">00:00</h2>
   <div class="d-flex justify-content-center" >
@@ -52,15 +53,14 @@
   </div>
 </div>
 
+
   <div id="game-screen" class=" position-relative" /style="display:none">
     <img id="game-map" class="position-absolute" src="images/gamemap.jpg" alt="map">
     <img id="player" class="position-absolute" src="images/leon1.png" alt="map">
-    <div id="timerbox" class="d-flex justify-content-center mt-2 ml-2">
-      <h1 id="timer" class="d-flex justify-content-center align-items-center text-warning">00:00</h1>
-    </div>
-    <div>
-      <img id="zombieicon" class="mt-1 ml-2" src="images/zombie1.png" alt="map">
-      <h3 id="hitcount">x0</h3>
+    <div id="timerbox" class="d-flex justify-content-center align-items-center mt-2 ml-2">
+      <h1 id="timer" class="d-flex justify-content-center align-items-center text-warning mr-2 ml-2">00:00</h1>
+      <img id="zombieicon" class="m-0 align-middle" src="images/zombie1.png" alt="map">
+      <h3 id="hitcount" class="align-middle mb-0 mr-2">x0</h3>
     </div>
 
   </div>
