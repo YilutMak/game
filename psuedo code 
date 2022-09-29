@@ -1,0 +1,20 @@
+
+//Character
+  //character moving
+  //character attack
+  //character health
+  //character animations
+
+//Zombies
+  //zombie creation
+  //zombie movement
+  //zombie health
+
+
+//Game features
+  //Initial/Reset State
+  //map movement
+  //score counting
+  //Timer
+  //Game Over
+  //

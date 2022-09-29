@@ -1,47 +1,95 @@
-.page-title {
-  background-color: #091D42;
-  padding: 20px;
-  color: white;
-  text-align: center;
-  font-size: 50px;
-  font-weight: bold;
+body{
+  background-color: rgb(29, 29, 29);
 }
 
-#answer-box,
-#game-over-box {
-  padding-top: 80px;
-  padding-bottom: 80px;
-  background-color: #9AB4CB;
-  text-align: center;
+#game-start {
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
-#counter {
-  font-size: 30px;
+
+#game-screen {
+width: 500px;
+height: 500px;
+position: absolute;
+overflow: hidden;
+margin: 0 auto;
 }
 
-#equation {
-  margin-top: 50px;
-  font-size: 60px;
-  font-weight: bold;
+#game-over {
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, .5);
+  color: #fff;
 }
 
-#solution-input {
-  margin-top: 3em;
-  padding: 10px;
-  width: 200px;
-  text-align: center;
+
+#youdied {
+  background-color: rgba(0, 0, 0, .5);
+  color: black;
+  box-shadow: 0px 2px 2px rgba(3, 3, 3, 0.6);
+  margin-top: 150px;
 }
 
-#game-over-box>h1 {
-  font-size: 60px;
+
+#tryagain {
+  width: 175px;
+  height: auto;
 }
 
-#game-over-box>h2 {
-  font-size: 30px;
+#game-map{
+width: 2250px;
+height: 2250px;
+object-fit: float;
+z-index: -1;
 }
 
-#game-over-box>button {
-  margin-top: 50px;
+#timer {
+  z-index: 2;
+  margin:0 auto;
 }
 
-/* Your Code Below */
+#timerbox {
+  width:225px;
+  height: 50px;
+  background-color: rgba(0, 0, 0, .5);
+  color: black;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+#zombieicon {
+  width: auto;
+  height: 30px;
+  object-fit: float;
+}
+
+#wasd {
+  width: auto;
+  height: 150px;
+  object-fit: float;
+}
+
+#spacebar {
+  width: auto;
+  height: 55px;
+  object-fit: float;
+}
+
+#cursor {
+  width: auto;
+  height: 20px;
+  object-fit: float;
+}
+
+#player{
+position: absolute;
+height: 20px;
+width: 20px;
+left: 240px;
+top: 240px;
+}
