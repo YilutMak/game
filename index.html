@@ -6,8 +6,18 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Game</title>
 
+<link rel="shortcut icon" href="favicon/favicon.ico">./
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<link rel="shortcut icon" href="#">
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
   integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -23,44 +33,46 @@
 
 </head>
 <body>
-<div id="game-start" >
-  <h1 class="d-flex justify-content-center mb-2 text-danger">Survive!</h1>
-  <h5 class="d-flex justify-content-center mb-2 text-center text-muted">How long can you survive the apocalypse?</h5>
-  <h7 class="d-flex justify-content-center mb-0 text-center text-muted">70% of the world population has been infected by the T virus. You must shoot and dodge all threats to survive...</h7>
-  <div class="m-2" style="background-color: rgba(198, 1, 1, 0.548); border-radius: 10px;">
+<div id="game-start">
+  <h1 class="d-flex justify-content-center mb-2 text-danger"></h1>
+  <h5 class="d-flex justify-content-center text-center text-muted"></h5>
+  <h10 id=intro class="d-flex justify-content-center mb-0 text-center text-muted">70% of the world population has been infected by the T virus. You must shoot and dodge all threats to survive...</h10>
+  <div id="screen" class="mt-2" style="background-color: rgba(25, 17, 102, 0.456);">
     <div class="d-flex align-items-center justify-content-center ">
       <img id="wasd" src="images/wasd.png" alt="map">
-      <h7 class="text-light">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use <b>W</b> <b>A</b> <b>S</b> <b>D</b> to <span class=" text-white"><b>Move!</b></span></h7>
+      <h7 class="text-light">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use <b>W</b> <b>A</b> <b>S</b> <b>D</b> to <span class=" text-danger"><b>Move!</b></span></h7>
     </div>
     <div class="d-flex justify-content-center">
       <img id="cursor" src="images/cursor.png" alt="map">
       <h7 class="text-light">&nbsp;&nbsp;Use <b>Cursor</b> to aim...&nbsp;</h7>
       <img id="spacebar" class="mb-4" src="images/spacebar.png" alt="map">
-      <h7 class="text-light">&nbsp;And <b>Spacebar</b> to <span class="text-white"><b>Shoot!</b></span></h7>
+      <h7 class="text-light">&nbsp;And <b>Spacebar</b> to <span class="text-danger"><b>Shoot!</b></span></h7>
     </div>
   </div>
   <div class="d-flex justify-content-center">
-    <button id="startbutton" type="button" class="btn btn-danger text-white btn-lg mt-4">  <b>START GAME</b>    </button>
+    <button id="startbutton" type="button" class="btn btn-danger text-white btn-lg mt-3 ">  <b>START GAME</b>    </button>
   </div>
 </div>
 
 <div id="game-over" class="" style="display:none !important">
 
-  <h1 id="youdied" class="d-flex text-danger justify-content-center mb-3">You Died...</h1>
-  <h2 id="gameovertimer" class="d-flex justify-content-center text-light mt-3">00:00</h2>
+  <h1 id="youdied" class="d-flex justify-content-center ">You Died...</h1>
+  <div class="d-flex justify-content-center align-items-center">
+  <h4 id="gameovertimer" class=" d-flex justify-content-center align-items-center ">00:00</h4>
+  </div>
   <div class="d-flex justify-content-center" >
-    <button id="tryagain" type="button" class=" btn btn-danger btn-lg mt-4"> Try Again?...</button>
+    <button id="tryagain" type="button" class=" btn btn-danger btn-lg "> Try Again?...</button>
   </div>
 </div>
 
 
   <div id="game-screen" class=" position-relative" /style="display:none">
-    <img id="game-map" class="position-absolute" src="images/gamemap.jpg" alt="map">
-    <img id="player" class="position-absolute" src="images/leon1.png" alt="map">
+    <img id="game-map" class="position-absolute" src="images/gamemap2.png" alt="map">
+    <img id="player" class="position-absolute" src="images/leon3.png" alt="map">
     <div id="timerbox" class="d-flex justify-content-center align-items-center mt-2 ml-2">
-      <h1 id="timer" class="d-flex justify-content-center align-items-center text-danger mr-2 ml-2">00:00</h1>
-      <img id="zombieicon" class="m-0 align-middle" src="images/zombie1.png" alt="map">
-      <h3 id="hitcount" class="align-middle ml-2 mb-0 mr-2 text-danger">x0</h3>
+      <h1 id="timer" class="d-flex justify-content-center align-items-center mr-2 ml-2">00:00</h1>
+      <img id="zombieicon" class="m-0 align-middle" src="images/zombieDead.png" alt="map">
+      <h3 id="hitcount" class="align-middle ml-2 mb-0 mr-2">x0</h3>
     </div>
 
   </div>
