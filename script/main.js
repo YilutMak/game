@@ -26,13 +26,13 @@ const $Hitcount = $("#hitcount");
 // Game Loop Related
 const FPS = 60;
 const LOOP_INTERVAL = 1000;
-let interval
+let interval;
 let loop = null;
 let seconds1 = 0;
 let seconds2 = 0;
 let minutes1 = 0;
 let minutes2 = 0;
-let finalScore = 0
+let finalScore = 0;
 let gameTimeStart = false;
 const $timer = $("#timer");
 let timeCount = false;
@@ -57,16 +57,16 @@ let enemySpeed = 0.1;
 const BULLET_WIDTH = 4;
 const BULLET_HEIGHT = 4;
 const BVELOCITY = 0.5;
-let cooldown = 0
-let cooldown2 = 0
-let cooldown3 = 0
-let cooldown4 = 0
-let cooldown5 = 0
-let cooldown6 = 0
-let cooldown7 = 0
-let cooldown8 = 0
-let cooldown9 = 0
-let cooldown10 = 0
+let cooldown = 0;
+let cooldown2 = 0;
+let cooldown3 = 0;
+let cooldown4 = 0;
+let cooldown5 = 0;
+let cooldown6 = 0;
+let cooldown7 = 0;
+let cooldown8 = 0;
+let cooldown9 = 0;
+let cooldown10 = 0;
 
 // Movement Related
 let goLeft = false;
@@ -388,16 +388,16 @@ function Game({ id, LOOP_INTERVAL }) {
     timerStart();
     moveMap();
     updateMap();
-    cooldown += 1
-    cooldown2 += 1
-    cooldown3 += 1
-    cooldown4 += 1
-    cooldown5 += 1
-    cooldown6 += 1
-    cooldown7 += 1
-    cooldown8 += 1
-    cooldown9 += 1
-    cooldown10 += 1
+    cooldown += 1;
+    cooldown2 += 1;
+    cooldown3 += 1;
+    cooldown4 += 1;
+    cooldown5 += 1;
+    cooldown6 += 1;
+    cooldown7 += 1;
+    cooldown8 += 1;
+    cooldown9 += 1;
+    cooldown10 += 1;
 
     //console.log(cooldown2)
     this.enemies.forEach((Enemy) => {
@@ -433,28 +433,27 @@ $(document).on("mousemove", function (e) {
   clientY = e.clientY;
 });
 
-
 //shooting bullets towards your cursor
 $(document).on("keypress", function (e) {
   if (cooldown > 40) {
     if (shoot && e.keyCode === 32) {
-    gunaudio.currentTime = 0
-    gunaudio.play();
-    const { left, top } = $GameScreen[0].getBoundingClientRect();
-    const mX = clientX - left;
-    const mY = clientY - top;
+      gunaudio.currentTime = 0;
+      gunaudio.play();
+      const { left, top } = $GameScreen[0].getBoundingClientRect();
+      const mX = clientX - left;
+      const mY = clientY - top;
 
-    const dX = mX - 250;
-    const dY = mY - 250;
-    const l = Math.sqrt(dX * dX + dY * dY);
+      const dX = mX - 250;
+      const dY = mY - 250;
+      const l = Math.sqrt(dX * dX + dY * dY);
 
-    game.addBullet({
-      yVelocity: dY / l,
-      xVelocity: dX / l,
-    });
-    shoot = false;
-  }
-  cooldown = 0
+      game.addBullet({
+        yVelocity: dY / l,
+        xVelocity: dX / l,
+      });
+      shoot = false;
+    }
+    cooldown = 0;
   }
 });
 
@@ -496,14 +495,11 @@ const hitBoxCheck = () => {
       }
       game.enemies.splice(0, game.enemies.length);
       //console.log('lose')
-      scoreCalculate()
+      scoreCalculate();
       console.log(finalScore);
-      $GameOvertimer.text(
-        "Your Score: " +
-          finalScore
-      );
+      $GameOvertimer.text("Your Score: " + finalScore);
       $GameScreen.hide();
-      gameaudio.pause()
+      gameaudio.pause();
       diedaudio.play();
       $GameOverScreen.show();
       timeCount = false;
@@ -520,7 +516,7 @@ const hitBoxCheck = () => {
         bulletYPosition <= enemyYPosition + 20 &&
         bulletYPosition >= enemyYPosition
       ) {
-        uhaudio.currentTime = 0
+        uhaudio.currentTime = 0;
         uhaudio.play();
         //console.log("hit");
         zombiesHit += 1;
@@ -568,61 +564,61 @@ const timerStart = () => {
 
     //when timer hits 5 seconds spawn new set of zombies
     if (seconds1) {
-      if (cooldown2 >= 500){
+      if (cooldown2 >= 500) {
         game.addEnemy(p1Settings);
-        cooldown2 = 0
-    }
+        cooldown2 = 0;
+      }
     }
     if (seconds2) {
-      if (cooldown3 >= 500){
+      if (cooldown3 >= 500) {
         game.addEnemy(p1Settings);
-        cooldown3 = 0
+        cooldown3 = 0;
       }
     }
-    if (seconds2>=2) {
-      if (cooldown4 >= 500){
+    if (seconds2 >= 2) {
+      if (cooldown4 >= 500) {
         game.addEnemy(p1Settings);
-        cooldown4 = 0
+        cooldown4 = 0;
       }
     }
-    if (seconds2>=3) {
-      if (cooldown5 >= 500){
+    if (seconds2 >= 3) {
+      if (cooldown5 >= 500) {
         game.addEnemy(p1Settings);
-        cooldown5 = 0
+        cooldown5 = 0;
       }
     }
-    if (seconds2>=4) {
-      if (cooldown10 >= 200){
+    if (seconds2 >= 4) {
+      if (cooldown10 >= 200) {
         game.addEnemy(p1Settings);
-        cooldown10 = 0
-    }
+        cooldown10 = 0;
+      }
     }
     if (minutes1) {
-      if (cooldown6 >= 100){
+      if (cooldown6 >= 100) {
         game.addEnemy(p1Settings);
-        cooldown6 = 0
+        cooldown6 = 0;
       }
     }
-    if (minutes1>2) {
-      if (cooldown7 >= 25){
+    if (minutes1 > 2) {
+      if (cooldown7 >= 25) {
         game.addEnemy(p1Settings);
-        cooldown7 = 0
+        cooldown7 = 0;
+      }
     }
-    }
-    if (minutes1>3) {
-      if (cooldown8 >= 25){
+    if (minutes1 > 3) {
+      if (cooldown8 >= 25) {
         game.addEnemy(p1Settings);
-        cooldown8 = 0
+        cooldown8 = 0;
+      }
     }
-    }
-    if (minutes1>4) {
-      if (cooldown9 >= 25){
+    if (minutes1 > 4) {
+      if (cooldown9 >= 25) {
         game.addEnemy(p1Settings);
-        cooldown9 = 0
-    }
+        cooldown9 = 0;
+      }
     }
   }
-}
+};
 
 //function to stop timer
 function timeStop() {
@@ -638,7 +634,7 @@ $startButton.on("click", $startButton, function (e) {
   $GameOverScreen.hide();
   timeCount = true;
   characterMovement = true;
-  gameaudio.currentTime = 0
+  gameaudio.currentTime = 0;
   gameaudio.play();
 });
 
@@ -662,7 +658,7 @@ const resetGame = () => {
   minutes2 = 0;
   travelY = 0;
   travelX = 0;
-  finalScore = 0
+  finalScore = 0;
   $timer.text("00:00");
   zombiesHit = 0;
   $Hitcount.text("x" + zombiesHit);
@@ -672,16 +668,15 @@ const resetGame = () => {
 };
 
 const scoreCalculate = () => {
-finalScore += seconds1.toFixed(0) * 5
-finalScore += seconds2.toFixed(0) * 10
-finalScore += minutes1.toFixed(0) * 1000
-finalScore += minutes2.toFixed(0) * 1000000
-finalScore += zombiesHit.toFixed(0) * 5
-console.log(finalScore)
-}
+  finalScore += seconds1.toFixed(0) * 5;
+  finalScore += seconds2.toFixed(0) * 10;
+  finalScore += minutes1.toFixed(0) * 1000;
+  finalScore += minutes2.toFixed(0) * 1000000;
+  finalScore += zombiesHit.toFixed(0) * 5;
+  console.log(finalScore);
+};
 
 const game = new Game(gameSettings);
-
 
 //how to hide screen
 //how to add image to constructor
